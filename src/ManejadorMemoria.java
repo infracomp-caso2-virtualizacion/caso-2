@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -18,6 +19,8 @@ public class ManejadorMemoria {
 	private static int[][] matriz1;
 	private static int[][] matriz2;
 	private static int[][] matriz3;
+
+	private static MemoriaVirtual memoriaVirtual;
 
 
     //Métodos
@@ -105,7 +108,69 @@ public class ManejadorMemoria {
 	private File modo1()
 	{
 		String data = "";
-		
+		data += "TP = "+ Integer.toString(tamPag);
+		data += "\nNF = "+ Integer.toString(numFilas);
+		data += "\nNC = "+ Integer.toString(numCols);
+		data += "\nNR = "+ Integer.toString(numFilas*numCols*3);
+		int pagAct = 0;
+		int desplazamientoAct = 0;
+
+		ArrayList<String> auxMatrizA = new ArrayList<String>();
+		for(int i = 0; i < numFilas; i++)
+		{
+			for(int j = 0; j < numCols; j++)
+			{
+				String dataTemp = "\n[A-"+Integer.toString(i)+"-"+Integer.toString(j)+"]"+", "+Integer.toString(pagAct)+", "+Integer.toString(desplazamientoAct);
+				auxMatrizA.add(dataTemp);
+				pagAct += (int) ((desplazamientoAct+tamInt)/tamPag);
+				desplazamientoAct = (desplazamientoAct+tamInt)%tamPag;
+				if ((desplazamientoAct+tamInt) > tamPag)
+				{
+					pagAct ++;
+					desplazamientoAct = 0;
+				}
+			}
+		}
+		ArrayList<String> auxMatrizB = new ArrayList<String>();
+		for(int i = 0; i < numFilas; i++)
+		{
+			for(int j = 0; j < numCols; j++)
+			{
+				String dataTemp = "\n[B-"+Integer.toString(i)+"-"+Integer.toString(j)+"]"+", "+Integer.toString(pagAct)+", "+Integer.toString(desplazamientoAct);
+				auxMatrizB.add(dataTemp);
+				pagAct += (int) ((desplazamientoAct+tamInt)/tamPag);
+				desplazamientoAct = (desplazamientoAct+tamInt)%tamPag;
+				if ((desplazamientoAct+tamInt) > tamPag)
+				{
+					pagAct ++;
+					desplazamientoAct = 0;
+				}
+			}
+		}
+		ArrayList<String> auxMatrizC = new ArrayList<String>();
+		for(int i = 0; i < numFilas; i++)
+		{
+			for(int j = 0; j < numCols; j++)
+			{
+				String dataTemp = "\n[C-"+Integer.toString(i)+"-"+Integer.toString(j)+"]"+", "+Integer.toString(pagAct)+", "+Integer.toString(desplazamientoAct);
+				auxMatrizC.add(dataTemp);
+				pagAct += (int) ((desplazamientoAct+tamInt)/tamPag);
+				desplazamientoAct = (desplazamientoAct+tamInt)%tamPag;
+				if ((desplazamientoAct+tamInt) > tamPag)
+				{
+					pagAct ++;
+					desplazamientoAct = 0;
+				}
+			}
+		}
+
+		for(int i = 0; i < (numFilas*numCols); i++)
+		{
+			data += auxMatrizA.get(i);
+			data += auxMatrizB.get(i);
+			data += auxMatrizC.get(i);
+		}
+
 		return escribirArchivo(data);
 	}
 
@@ -125,16 +190,18 @@ public class ManejadorMemoria {
 		numFilas = sc.nextInt ( );
 		System.out.println( "\nPor favor ingrese el número de columnas de las matrices (debe ser positivo): ");
 		numCols = sc.nextInt ( );
-		System.out.println( "\nPor favor ingrese el tamaño de entero (debe ser positivo): ");
+		System.out.println( "\nPor favor ingrese el tamaño de entero (Bytes): ");
 		tamInt = sc.nextInt ( );
-		System.out.println( "\nPor favor ingrese el tamaño de una página (debe ser positivo): ");
+		System.out.println( "\nPor favor ingrese el tamaño de una página (Bytes): ");
 		tamPag = sc.nextInt ( );
 		System.out.println( "\nPor favor ingrese el número de marcos de página (debe ser positivo): ");
 		numPag = sc.nextInt ( );
 		manejadorMemoria.crearMatrices();
+		//Se inicializa la memoria virtual
+		memoriaVirtual = new MemoriaVirtual();
 
 		File archivoSalidaModo1 = manejadorMemoria.modo1();
-		
+
 		manejadorMemoria.modo2(archivoSalidaModo1);
 
 
