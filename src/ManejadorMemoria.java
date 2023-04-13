@@ -108,10 +108,10 @@ public class ManejadorMemoria {
 	private File modo1()
 	{
 		String data = "";
-		data += "TP = "+ Integer.toString(tamPag);
-		data += "\nNF = "+ Integer.toString(numFilas);
-		data += "\nNC = "+ Integer.toString(numCols);
-		data += "\nNR = "+ Integer.toString(numFilas*numCols*3);
+		data += "TP="+ Integer.toString(tamPag);
+		data += "\nNF="+ Integer.toString(numFilas);
+		data += "\nNC="+ Integer.toString(numCols);
+		data += "\nNR="+ Integer.toString(numFilas*numCols*3);
 		int pagAct = 0;
 		int desplazamientoAct = 0;
 
@@ -120,7 +120,7 @@ public class ManejadorMemoria {
 		{
 			for(int j = 0; j < numCols; j++)
 			{
-				String dataTemp = "\n[A-"+Integer.toString(i)+"-"+Integer.toString(j)+"]"+", "+Integer.toString(pagAct)+", "+Integer.toString(desplazamientoAct);
+				String dataTemp = "\n[A-"+Integer.toString(i)+"-"+Integer.toString(j)+"]"+","+Integer.toString(pagAct)+","+Integer.toString(desplazamientoAct);
 				auxMatrizA.add(dataTemp);
 				pagAct += (int) ((desplazamientoAct+tamInt)/tamPag);
 				desplazamientoAct = (desplazamientoAct+tamInt)%tamPag;
@@ -136,7 +136,7 @@ public class ManejadorMemoria {
 		{
 			for(int j = 0; j < numCols; j++)
 			{
-				String dataTemp = "\n[B-"+Integer.toString(i)+"-"+Integer.toString(j)+"]"+", "+Integer.toString(pagAct)+", "+Integer.toString(desplazamientoAct);
+				String dataTemp = "\n[B-"+Integer.toString(i)+"-"+Integer.toString(j)+"]"+","+Integer.toString(pagAct)+","+Integer.toString(desplazamientoAct);
 				auxMatrizB.add(dataTemp);
 				pagAct += (int) ((desplazamientoAct+tamInt)/tamPag);
 				desplazamientoAct = (desplazamientoAct+tamInt)%tamPag;
@@ -152,7 +152,7 @@ public class ManejadorMemoria {
 		{
 			for(int j = 0; j < numCols; j++)
 			{
-				String dataTemp = "\n[C-"+Integer.toString(i)+"-"+Integer.toString(j)+"]"+", "+Integer.toString(pagAct)+", "+Integer.toString(desplazamientoAct);
+				String dataTemp = "\n[C-"+Integer.toString(i)+"-"+Integer.toString(j)+"]"+","+Integer.toString(pagAct)+","+Integer.toString(desplazamientoAct);
 				auxMatrizC.add(dataTemp);
 				pagAct += (int) ((desplazamientoAct+tamInt)/tamPag);
 				desplazamientoAct = (desplazamientoAct+tamInt)%tamPag;
