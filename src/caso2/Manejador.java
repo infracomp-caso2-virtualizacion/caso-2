@@ -44,7 +44,6 @@ public class Manejador {
 		}
 
 
-
 	}
 
 	public synchronized void quitarPagina(int id) {
@@ -56,20 +55,30 @@ public class Manejador {
 		}
 	}
 
-	public synchronized Pagina envejecimiento(ArrayList<Pagina> memoriaVirtual) {
+	public synchronized Pagina getYoungest(ArrayList<Pagina> memoriaVirtual) {
 		Pagina ret = memoriaVirtual.get(0);
 
 		for (Pagina pagina : memoriaVirtual) {
-			if (pagina.getUsada()) {
-				pagina.edad = pagina.edad << 1;
-				if (pagina.edad > ret.edad || !ret.getUsada()) {
-					ret = pagina;
-				}
-			} else {
-				pagina.edad = 10000000;
+			if (pagina.edad < ret.edad) {
+				ret = pagina;
 			}
 		}
+
 		return ret;
+	}
+
+	public synchronized void envejecimiento(ArrayList<Pagina> memoriaVirtual) {
+
+		for (Pagina pagina : memoriaVirtual) {
+			if (pagina.getUsada()) {
+				pagina.edad =  (int) pagina.edad/10;
+				pagina.edad = pagina.edad+10000000;
+				pagina.setUsada(false);
+			} else {
+				pagina.edad = (int) pagina.edad/10;
+			}
+		}
+
 	}
 
 	public synchronized void agregarPagina(int i) {
