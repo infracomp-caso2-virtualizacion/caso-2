@@ -40,7 +40,7 @@ public class CargadeReferencias extends Thread{
 			continuar= false;
 		
 		} else if (this.getTipo().equals("envejecimiento")) {
-			for (int i = 0; i < paginasLista.size()*2; i ++) {
+			for (int i = 0; i < paginasLista.size()*3; i ++) {
 				System.out.println("envej");
 				mj.envejecimiento(mj.getMarcoPagina());
 				try {
