@@ -12,11 +12,6 @@ public class MemoriaReal {
 	private static int cantMarcos;
 	private ArrayList<String> lstPaginas = new ArrayList<>();
 
-	private String getUltimaPagina() {
-		ArrayList<String> lstPaginas = this.lstPaginas;
-		
-	}
-
 	public void cargarArchivo() throws IOException {
 		File archivo = new File ("./test_cases/test_1.txt");
 		FileReader fr;
