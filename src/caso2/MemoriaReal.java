@@ -17,8 +17,6 @@ public class MemoriaReal {
 		
 	}
 
-	public void obtenerUltimaMemor
-
 	public void cargarArchivo() throws IOException {
 		File archivo = new File ("./test_cases/test_1.txt");
 		FileReader fr;
