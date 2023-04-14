@@ -115,65 +115,29 @@ public class ManejadorMemoria {
 		data += "\nNF="+ Integer.toString(numFilas);
 		data += "\nNC="+ Integer.toString(numCols);
 		data += "\nNR="+ Integer.toString(numFilas*numCols*3);
-		int pagAct = 0;
-		int desplazamientoAct = 0;
+		int pagActA = 0;
+		int desplazamientoActA = 0;
+		int tamMatriz = tamInt*numFilas*numCols;
+		int pagActB = (int) tamMatriz/tamPag;
+		int desplazamientoActB = tamMatriz%tamPag;
+		int pagActC = (int) 2*tamMatriz/tamPag;
+		int desplazamientoActC = (2*tamMatriz)%tamPag;
 
-		ArrayList<String> auxMatrizA = new ArrayList<String>();
 		for(int i = 0; i < numFilas; i++)
 		{
 			for(int j = 0; j < numCols; j++)
 			{
-				String dataTemp = "\n[A-"+Integer.toString(i)+"-"+Integer.toString(j)+"]"+","+Integer.toString(pagAct)+","+Integer.toString(desplazamientoAct);
-				auxMatrizA.add(dataTemp);
-				pagAct += (int) ((desplazamientoAct+tamInt)/tamPag);
-				desplazamientoAct = (desplazamientoAct+tamInt)%tamPag;
-				if ((desplazamientoAct+tamInt) > tamPag)
-				{
-					pagAct ++;
-					desplazamientoAct = 0;
-				}
+				data += "\n[A-"+Integer.toString(i)+"-"+Integer.toString(j)+"]"+","+Integer.toString(pagActA)+","+Integer.toString(desplazamientoActA);
+				data += "\n[B-"+Integer.toString(i)+"-"+Integer.toString(j)+"]"+","+Integer.toString(pagActB)+","+Integer.toString(desplazamientoActB);
+				data += "\n[C-"+Integer.toString(i)+"-"+Integer.toString(j)+"]"+","+Integer.toString(pagActC)+","+Integer.toString(desplazamientoActC);
+				pagActA += (int) ((desplazamientoActA+tamInt)/tamPag);
+				desplazamientoActA = (desplazamientoActA+tamInt)%tamPag;
+				pagActB += (int) ((desplazamientoActB+tamInt)/tamPag);
+				desplazamientoActB = (desplazamientoActB+tamInt)%tamPag;
+				pagActC += (int) ((desplazamientoActC+tamInt)/tamPag);
+				desplazamientoActC = (desplazamientoActC+tamInt)%tamPag;
 			}
 		}
-		ArrayList<String> auxMatrizB = new ArrayList<String>();
-		for(int i = 0; i < numFilas; i++)
-		{
-			for(int j = 0; j < numCols; j++)
-			{
-				String dataTemp = "\n[B-"+Integer.toString(i)+"-"+Integer.toString(j)+"]"+","+Integer.toString(pagAct)+","+Integer.toString(desplazamientoAct);
-				auxMatrizB.add(dataTemp);
-				pagAct += (int) ((desplazamientoAct+tamInt)/tamPag);
-				desplazamientoAct = (desplazamientoAct+tamInt)%tamPag;
-				if ((desplazamientoAct+tamInt) > tamPag)
-				{
-					pagAct ++;
-					desplazamientoAct = 0;
-				}
-			}
-		}
-		ArrayList<String> auxMatrizC = new ArrayList<String>();
-		for(int i = 0; i < numFilas; i++)
-		{
-			for(int j = 0; j < numCols; j++)
-			{
-				String dataTemp = "\n[C-"+Integer.toString(i)+"-"+Integer.toString(j)+"]"+","+Integer.toString(pagAct)+","+Integer.toString(desplazamientoAct);
-				auxMatrizC.add(dataTemp);
-				pagAct += (int) ((desplazamientoAct+tamInt)/tamPag);
-				desplazamientoAct = (desplazamientoAct+tamInt)%tamPag;
-				if ((desplazamientoAct+tamInt) > tamPag)
-				{
-					pagAct ++;
-					desplazamientoAct = 0;
-				}
-			}
-		}
-
-		for(int i = 0; i < (numFilas*numCols); i++)
-		{
-			data += auxMatrizA.get(i);
-			data += auxMatrizB.get(i);
-			data += auxMatrizC.get(i);
-		}
-
 		return escribirArchivo(data);
 	}
 
@@ -182,23 +146,34 @@ public class ManejadorMemoria {
 	{
 		
 	}
-
+	
     public static void main(String[] args) throws Exception 
     {
         ManejadorMemoria manejadorMemoria = new ManejadorMemoria();
 		manejadorMemoria.imprimirTitulo();
-		// Obtiene los inputs del usuario
-        Scanner sc = new Scanner ( System.in );
-		System.out.println( "\nPor favor ingrese el número de filas de las matrices (debe ser positivo): ");
-		numFilas = sc.nextInt ( );
-		System.out.println( "\nPor favor ingrese el número de columnas de las matrices (debe ser positivo): ");
-		numCols = sc.nextInt ( );
-		System.out.println( "\nPor favor ingrese el tamaño de entero (Bytes): ");
-		tamInt = sc.nextInt ( );
-		System.out.println( "\nPor favor ingrese el tamaño de una página (Bytes): ");
-		tamPag = sc.nextInt ( );
-		System.out.println( "\nPor favor ingrese el número de marcos de página (debe ser positivo): ");
-		numPag = sc.nextInt ( );
+		Scanner sc = new Scanner ( System.in );
+		System.out.println( "\nPor favor ingrese la ruta del archivo (ej: \"datos.txt\"): ");
+		String archivo = sc.nextLine();
+		try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] campos = linea.split("=");
+                if (campos.length == 2) {
+                    String nombre = campos[0];
+                    String valor = campos[1];
+					if (nombre.equals("NF")) {numFilas = Integer.valueOf(valor);}
+					if (nombre.equals("NC")) {numCols = Integer.valueOf(valor);}
+					if (nombre.equals("TE")) {tamInt = Integer.valueOf(valor);}
+					if (nombre.equals("TP")) {tamPag = Integer.valueOf(valor);}
+					if (nombre.equals("MP")) {numPag = Integer.valueOf(valor);}
+                } else {
+                    System.err.println("Error: la línea no tiene el formato correcto: " + linea);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error al leer el archivo: " + e.getMessage());
+        }
+
 		manejadorMemoria.crearMatrices();
 		//Se inicializa la memoria virtual
 		memoriaVirtual = new MemoriaVirtual();
