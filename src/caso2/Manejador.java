@@ -61,12 +61,12 @@ public class Manejador {
 
 		for (Pagina pagina : memoriaVirtual) {
 			if (pagina.getUsada()) {
-				pagina.edad = 10000000;
-			} else {
 				pagina.edad = pagina.edad << 1;
-				if (pagina.edad > ret.edad) {
+				if (pagina.edad > ret.edad || !ret.getUsada()) {
 					ret = pagina;
 				}
+			} else {
+				pagina.edad = 10000000;
 			}
 		}
 		return ret;
