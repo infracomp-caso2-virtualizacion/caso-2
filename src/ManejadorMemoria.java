@@ -28,7 +28,7 @@ public class ManejadorMemoria {
         System.out.println ( "==================================================" );
         System.out.println ( "ISIS 2203 - Infraestructura Computacional - 202310" );
         System.out.println ( "------------ Caso 2 - Memoria Virtual ------------" );
-        System.out.println ( "---- s.forerog2 - j.torres16 - codigo2 -----" );
+        System.out.println ( "---- s.forerog2 - j.torres16 - s.latorre -----" );
         System.out.println ( "==================================================" );
     }
 
@@ -80,9 +80,9 @@ public class ManejadorMemoria {
 
 	
 
-	private File escribirArchivo(String data)
+	private File escribirArchivo(String nombre, String data)
 	{
-		File file = new File("modo1salida.txt");
+		File file = new File(nombre);
 		FileWriter fr = null;
 		try {
 			fr = new FileWriter(file);
@@ -135,7 +135,7 @@ public class ManejadorMemoria {
 				desplazamientoActC = (desplazamientoActC+tamInt)%tamPag;
 			}
 		}
-		escribirArchivo(data);
+		escribirArchivo("modo1salida.txt",data);
 	}
 
 	
@@ -177,7 +177,13 @@ public class ManejadorMemoria {
 		CargadeReferencias hilo2 = new CargadeReferencias(lstPaginas, mj, "envejecimiento");
 		hilo1.start();
 		hilo2.start();
-
+		while (hilo2.isAlive() ) {
+			
+		}
+		String q = "Ocurrieron "+ hilo2.getCantFallas() + " fallas";
+		System.out.println(q);
+		escribirArchivo("modo2salida.txt", q);
+		
 	
 	}
 	

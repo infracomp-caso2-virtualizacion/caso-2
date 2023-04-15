@@ -9,7 +9,18 @@ public class CargadeReferencias extends Thread{
 	private int cant;
 	private String tipo;
 	private boolean continuar;
+	public int numFallas;
 	
+	public int getCantFallas() {
+		return numFallas;
+	}
+	
+	public void getCantFallasStr() {
+		System.out.println("Ocurrieron " + numFallas + " fallas");
+	}
+	public void setCantFallas(int fallas) {
+		this.numFallas = fallas;
+	}
 	public String getTipo() {
 		return tipo;
 	}
@@ -23,7 +34,6 @@ public class CargadeReferencias extends Thread{
 	public void run() {
 		if (this.getTipo().equals("cargador")){
 			for (int i = 0; i < paginasLista.size(); i++) {
-				System.out.println("carg");
 				mj.agregarPagina(paginasLista.get(i));
 				try {
 					sleep(2);
@@ -37,7 +47,6 @@ public class CargadeReferencias extends Thread{
 		} 
 		else if (this.getTipo().equals("envejecimiento")) {
 			while(mj.continuar()) {
-				System.out.println("envej");
 				mj.envejecimiento(mj.getMarcoPagina());
 				try {
 					sleep(1);
@@ -46,9 +55,9 @@ public class CargadeReferencias extends Thread{
 					e.printStackTrace();
 				}
 			}
-			System.out.println("Ocurrieron " + mj.getFallas() + " fallas");
-		}
 			
+		}
+		setCantFallas(mj.getFallas());
 		
 	}
 }
