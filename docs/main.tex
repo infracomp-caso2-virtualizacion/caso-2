@@ -99,6 +99,14 @@ menor edad.
 
 %-------------------------------
 \section{Preguntas realizadas.}
+
+\subsection{¿Que pasaría si las matrices fueran almacenadas en major column order?}
+En caso de que pudiésemos cambiar el orden de ejecución de la suma no habría mayor diferencia, pues sería muy similar al caso actual. Sin embargo, si la suma se siguiera haciendo en orden de las filas pero las matrices fueran almacenadas siguiendo column-major order ya se empezaría a notar la diferencia. Ya que analizando como funciona el algoritmo actualmente, podemos ver que cuando en los marcos de página caben al menos tres matrices a la vez, no se generan tantos fallos al leer un gran número de elementos de una misma página en una sola subida a memoria física. Es decir que es probable que los elementos ubicados en una misma fila estén en la misma página y no haya tantos fallos de página. Mientras que en un column-major order la probabilidad de que dos elementos de una misma fila se encuentren en una misma página disminuiría bastante. Por lo que es posible que para cada elemento de la matriz no se encuentre la página necesaria en los marcos de página, aumentando considerablemente los fallos de página.
+
+\begin{center}
+\includegraphics[scale=0.25]{cmo.jpeg}
+\end{center}
+
 \subsection{¿Cómo varía el número de fallas de página si el algoritmo 
 estudiado es el de multiplicación de matrices?}
 La suma es una operación cuyo resultado generalmente no excede el 
