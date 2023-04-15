@@ -42,7 +42,7 @@ Infraestructura Computacional\\
 %	CONTENIDO
 %-------------------------------
 \section{Detalles de implementación}
-\subsection{Caso 1}
+\subsection{Modo 1}
 Para lograr generar referencias de página en primer lugar se define una
 posición inicial en páginas y desplazamiento para cada una de las 3 
 matrices dependiendo del tamaño del entero, el tamaño de una página y 
@@ -71,7 +71,7 @@ página, el desplazamiento se le suma el tamaño de entero; y si es
 mayor, se vuelve a iniciar en 0. Finalmente se trasforma esto a un 
 archivo.
 
-\subsection{Caso 2}
+\subsection{Modo 2}
 \subsubsection{Algoritmo de Envejecimiento.}
 Con respecto al algoritmo de envejecimiento, este se encuentra localizado
 en el Manejador, principalmente con el fin de poder acceder a la tabla de 
@@ -87,16 +87,41 @@ itera sobre la tabla de páginas, haciendo operaciones binarias sobre el int que
 representa la edad de la página, mientras que el otro selecciona la página de
 menor edad.
 
+\section{Gráficos de ejecución}
+\subsection{Prueba 1}
+\includegraphics{1-1.jpeg}
+\includegraphics[scale=0.55]{1-2.jpeg}
+
+\subsection{Prueba 2}
+\includegraphics{2-1.jpeg}
+\includegraphics[scale=0.55]{2-2.jpeg}
+
+
 %-------------------------------
 \section{Preguntas realizadas.}
 \subsection{¿Cómo varía el número de fallas de página si el algoritmo 
 estudiado es el de multiplicación de matrices?}
-
-
 La suma es una operación cuyo resultado generalmente no excede el 
 tamaño de los sumandos, es decir, no requiere de una mayor cantidad de 
 bits para ser representado en su forma binaria. Teniendo esto en cuenta 
-y considerando que en el algoritmo solo se estudiaron tamaños de entero inferiores al tamaño de una página, se puede afirmar que para cargar los tres números de la suma (cada uno proveniente de su respectiva matriz) se requiere de máximo tres marcos de página.  Por otro lado, dada la naturaleza de la multiplicación, 
-es muchísimo más probable que el resultado adquiera un valor superior al de los factores, de manera que, en las mismas condiciones de la suma, será necesaria más de una página para almacenar este valor en su totalidad. 
-Habiendo comprendido como se desenvuelven ambos algoritmos al cargarse en memoria virtual, llega el momento de revisar qué sucede cuando se quieren cargar a memoria real, lugar donde suceden las fallas de página: como ya se ha comprobado que en promedio una operación de multiplicación requiere de más páginas que una de suma, también necesitará de más marcos de pagina para cargarse en memoria real. Como resultado, se producirá una mayor cantidad de fallas al ser necesario reemplazar más frecuentemente las páginas para poder cargar los números que se requieran.
+y considerando que en el algoritmo solo se estudiaron tamaños de entero 
+inferiores al tamaño de una página, se puede afirmar que para cargar los 
+tres números de la suma (cada uno proveniente de su respectiva matriz) 
+se requiere de máximo tres marcos de página. Por otro lado, dada la 
+naturaleza de la multiplicación, es muchísimo más probable que el 
+resultado adquiera un valor superior al de los factores, de manera que, 
+en las mismas condiciones de la suma, será necesaria más de una página 
+para almacenar este valor en su totalidad. Esto ya que para multiplicar 
+matrices se tendría que realizar un producto punto para cada posición 
+de la matriz resultado (recordar la fórmula de producto punto):
+
+\begin{center}
+    \includegraphics[scale=0.5]{prod_p.jpeg}    
+\end{center}
+
+
+Y, además, este calculo se realiza sobre la fila de una matriz y la columna de la otra, de forma que sería probable que se deban usar más páginas para guardar los cálculos parciales. Habiendo comprendido como se desenvuelven ambos algoritmos al cargarse en memoria virtual, llega el momento de revisar qué sucede cuando se quieren cargar a memoria real, lugar donde suceden las fallas de página: como ya se ha comprobado que en promedio una operación de multiplicación requiere de más páginas que una de suma, también necesitará de más marcos de página para cargarse en memoria real. Como resultado, se producirá una mayor cantidad de fallas al ser necesario reemplazar más frecuentemente las páginas para poder cargar los números que se requieran.
+
+
+
 \end{document}
