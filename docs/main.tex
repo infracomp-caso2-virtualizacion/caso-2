@@ -110,8 +110,13 @@ nos daríamos cuenta de que la clase 'Pagina.java' es en realidad, bastante
 parecida a como se utilizaría un struct en C, y que su principal función es
 almacenar y actualizar información de una página en concreto. Esta luego se
 almacenará en arrays de Páginas, que representarán las estructuras del sistema
-operativo que almacenan estas páginas de memoria. Iterando sobre estos arrays
-podemos consultar fácilmente las páginas dentro de ciclos y acceder a estas
+operativo que almacenan estas páginas de memoria. Estos arrays corresponden a
+MemoriaVirtual, MarcoPagina y TablaDePaginas, cuyos nombres son indicativos de
+las definiciones a estos términos establecidas de forma teórica, con MemoriaVirtual
+apuntando a todas las tablas contenidas en la memoria virtual, MarcoPagina indicando
+las páginas en memoria real, y TablaDePaginas siendo un array complementario a
+este último, que almacena la información de indices dentro de la memoria real. 
+Iterando sobre estos arrays podemos consultar fácilmente las páginas dentro de ciclos y acceder a estas
 durante la ejecución de los algoritmos. Esto es particularmente evidente en
 el modo 2, donde el algoritmo de envejecimiento y de actualización constantemente
 deben acceder y modificar páginas, en caso de ser de interés para un algoritmo
@@ -119,11 +124,17 @@ en concreto, este accederá a la información contenida y la cambiará, como los
 algoritmos estan sincronizados podemos garantizar hasta cierto punto la 
 consistencia interna de la información y poder mantener registro de todo,
 fuera de esto se llevó cuenta de valores númericos importantes con int y se
-usaron Scanners para poder leer y escribir archivos en el programa.  
+usaron Scanners para poder leer y escribir archivos en el programa. El manejo de
+estas estructuras puede en algunos casos llegar a tener en cuenta el orden de las
+operaciones, como ocurre con MarcoPagina, por ejemplo.
 
 \subsection{¿Que esquema de sincronización fue usado? Justifique brevemente dónde es necesario usar sincronización y por qué}
 
 Para lograr la sincronización entre los threads del algoritmo de reemplazo de páginas y el de envejecimiento se usa una clase monitor que se instancia una única vez para almacenar las estructuras compartidas entre ambos threads. Dentro de esta instancia única de monitor se tienen métodos sincronizados (synchronized) sobre los get de varias variables o sobre la variable “continuar” que permanecerá en verdadero hasta que termine el thread de reemplazo de páginas para avisar al de envejecimiento que debe terminar. O también sobre el método de almacenar memoria virtual donde se crean las páginas con los valores por defecto, esto ya que si los otros hilos comienzan a ejecutarse antes de instanciar todas las páginas podrían haber lecturas sucias del tamaño de la memoria virtual. También sobre el método agregar página ya que se encarga de forma atómica de reemplazar páginas en marcos de página cuando haya un fallo de página (eliminación y agregación), además de que consulta el resultado del algoritmo de envejecimiento. Y, finalmente, sobre el método de envejecimiento ya que este no puede correr a la vez que el otro thread o si no podría haber una página usada recientemente que no sea tomada en cuenta por el algoritmo de envejecimiento.
+
+\subsection{Esquema de sincronización usado. Justifique brevemente dónde es necesario usar sincronización y por qué}
+
+
 
 \subsection{¿Que pasaría si las matrices fueran almacenadas en major column order?}
 En caso de que pudiésemos cambiar el orden de ejecución de la suma no habría mayor diferencia, pues sería muy similar al caso actual. Sin embargo, si la suma se siguiera haciendo en orden de las filas pero las matrices fueran almacenadas siguiendo column-major order ya se empezaría a notar la diferencia. Ya que analizando como funciona el algoritmo actualmente, podemos ver que cuando en los marcos de página caben al menos tres matrices a la vez, no se generan tantos fallos al leer un gran número de elementos de una misma página en una sola subida a memoria física. Es decir que es probable que los elementos ubicados en una misma fila estén en la misma página y no haya tantos fallos de página. Mientras que en un column-major order la probabilidad de que dos elementos de una misma fila se encuentren en una misma página disminuiría bastante. Por lo que es posible que para cada elemento de la matriz no se encuentre la página necesaria en los marcos de página, aumentando considerablemente los fallos de página.
