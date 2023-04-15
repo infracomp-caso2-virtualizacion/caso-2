@@ -13,7 +13,7 @@ public class MemoriaReal {
 	private ArrayList<String> lstPaginas = new ArrayList<>();
 
 	public void cargarArchivo() throws IOException {
-		File archivo = new File ("./test_cases/test_1.txt");
+		File archivo = new File ("./test_cases/test_2.txt");
 		FileReader fr;
 		
 		fr = new FileReader (archivo);
@@ -29,8 +29,10 @@ public class MemoriaReal {
 			linea = br.readLine();
 		}
 		Manejador mj = new Manejador(cantMarcos);
-		CargadeReferencias hilo = new CargadeReferencias(lstPaginas,mj);
+		CargadeReferencias hilo = new CargadeReferencias(lstPaginas,mj, "cargador");
 		hilo.start();
+		CargadeReferencias hilo2 = new CargadeReferencias(lstPaginas,mj, "envejecimiento");
+		hilo2.start();
 
 	
 		

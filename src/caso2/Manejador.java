@@ -17,6 +17,9 @@ public class Manejador {
 		fallas = 0;
 	}
 
+	public ArrayList<Pagina> getMarcoPagina(){
+		return marcoPagina;
+	}
 	public int getFallas() {
 		return fallas;
 	}
@@ -89,13 +92,14 @@ public class Manejador {
 				fallas += 1;
 
 
-				//quitarPagina() con el id que devuelve el otro thread
+				Pagina remove = getYoungest(marcoPagina);
+				quitarPagina(remove.getId());
 
 
 			}
 
 			Pagina nueva = memoriaVirtual.get(i);
-			nueva.setUsada();
+			nueva.setUsada(true);
 			marcoPagina.add(nueva);
 
 		}
