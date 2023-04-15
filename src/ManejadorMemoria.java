@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.Scanner;
 
 public class ManejadorMemoria {
     
@@ -19,9 +18,9 @@ public class ManejadorMemoria {
 
 	private static int[][] matriz1;
 	private static int[][] matriz2;
-	private static int[][] matriz3;
 
-	private static MemoriaVirtual memoriaVirtual;
+	
+	private ArrayList<Integer> lstPaginas = new ArrayList<>();
 
 
     //Métodos
@@ -38,7 +37,6 @@ public class ManejadorMemoria {
 	{
 		matriz1 = new int[numFilas][numCols];
 		matriz2 = new int[numFilas][numCols];
-		matriz3 = new int[numFilas][numCols];
 		int maxInt = (int) (Math.pow(2,(tamInt*8))/2);
 
 		for(int i = 0; i < numFilas; i++)
@@ -80,9 +78,7 @@ public class ManejadorMemoria {
 		
 	}
 
-	private void leerArchivo(String path) {
-		
-	}
+	
 
 	private File escribirArchivo(String data)
 	{
@@ -108,13 +104,14 @@ public class ManejadorMemoria {
 		return file;
 	}
 	
-	private File modo1()
+	private void modo1()
 	{
 		String data = "";
 		data += "TP="+ Integer.toString(tamPag);
 		data += "\nNF="+ Integer.toString(numFilas);
 		data += "\nNC="+ Integer.toString(numCols);
 		data += "\nNR="+ Integer.toString(numFilas*numCols*3);
+		data += "\nMP="+ Integer.toString(numPag);
 		int pagActA = 0;
 		int desplazamientoActA = 0;
 		int tamMatriz = tamInt*numFilas*numCols;
@@ -138,13 +135,50 @@ public class ManejadorMemoria {
 				desplazamientoActC = (desplazamientoActC+tamInt)%tamPag;
 			}
 		}
-		return escribirArchivo(data);
+		escribirArchivo(data);
 	}
 
 	
-	private void modo2(File archivo)
+	private void modo2(String archivoModo1)
 	{
+		try (BufferedReader br = new BufferedReader(new FileReader(archivoModo1))) {
+			String linea;
+			for (int i = 0; i < 5; i++) {
+				linea = br.readLine();
+				String[] campos = linea.split("=");
+				if (campos.length == 2) {
+					String nombre = campos[0];
+					String valor = campos[1];
+					if (nombre.equals("NF")) {numFilas = Integer.valueOf(valor);}
+					if (nombre.equals("NC")) {numCols = Integer.valueOf(valor);}
+					if (nombre.equals("TE")) {tamInt = Integer.valueOf(valor);}
+					if (nombre.equals("TP")) {tamPag = Integer.valueOf(valor);}
+					if (nombre.equals("MP")) {numPag = Integer.valueOf(valor);}
+				} else {
+					System.err.println("Error: la línea no tiene el formato correcto: " + linea);
+				}
+				
+			}
+			linea = br.readLine();
+			lstPaginas = new ArrayList<>();
+			while (linea != null) {
+				String[] parts = linea.split(",");
+				lstPaginas.add(Integer.valueOf(parts[1]));
+				linea = br.readLine();
+			}
+		} 
+		catch (IOException e) {
+			System.err.println("Error al leer el archivo: " + e.getMessage());
+		}	
 		
+		Monitor mj = new Monitor(numPag);
+		mj.llenarMemoriaVirtual(lstPaginas);
+		CargadeReferencias hilo1 = new CargadeReferencias(lstPaginas, mj, "cargador");
+		CargadeReferencias hilo2 = new CargadeReferencias(lstPaginas, mj, "envejecimiento");
+		hilo1.start();
+		hilo2.start();
+
+	
 	}
 	
     public static void main(String[] args) throws Exception 
@@ -152,37 +186,44 @@ public class ManejadorMemoria {
         ManejadorMemoria manejadorMemoria = new ManejadorMemoria();
 		manejadorMemoria.imprimirTitulo();
 		Scanner sc = new Scanner ( System.in );
-		System.out.println( "\nPor favor ingrese la ruta del archivo (ej: \"datos.txt\"): ");
-		String archivo = sc.nextLine();
-		try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
-            String linea;
-            while ((linea = br.readLine()) != null) {
-                String[] campos = linea.split("=");
-                if (campos.length == 2) {
-                    String nombre = campos[0];
-                    String valor = campos[1];
-					if (nombre.equals("NF")) {numFilas = Integer.valueOf(valor);}
-					if (nombre.equals("NC")) {numCols = Integer.valueOf(valor);}
-					if (nombre.equals("TE")) {tamInt = Integer.valueOf(valor);}
-					if (nombre.equals("TP")) {tamPag = Integer.valueOf(valor);}
-					if (nombre.equals("MP")) {numPag = Integer.valueOf(valor);}
-                } else {
-                    System.err.println("Error: la línea no tiene el formato correcto: " + linea);
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("Error al leer el archivo: " + e.getMessage());
-        }
+		String archivoModo1 = "";
+		System.out.println( "\nPor favor ingrese 1 para ejecutar modos 1 y 2, o 2 para solo el modo 2: ");
+		String opcion = sc.nextLine();
+		if (opcion.equals("1"))
+		{
+			System.out.println( "\nPor favor ingrese la ruta del archivo (ej: \"datos.txt\"): ");
+			String archivo = sc.nextLine();
+			try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+				String linea;
+				while ((linea = br.readLine()) != null) {
+					String[] campos = linea.split("=");
+					if (campos.length == 2) {
+						String nombre = campos[0];
+						String valor = campos[1];
+						if (nombre.equals("NF")) {numFilas = Integer.valueOf(valor);}
+						if (nombre.equals("NC")) {numCols = Integer.valueOf(valor);}
+						if (nombre.equals("TE")) {tamInt = Integer.valueOf(valor);}
+						if (nombre.equals("TP")) {tamPag = Integer.valueOf(valor);}
+						if (nombre.equals("MP")) {numPag = Integer.valueOf(valor);}
+					} else {
+						System.err.println("Error: la línea no tiene el formato correcto: " + linea);
+					}
+				}
+			} catch (IOException e) {
+				System.err.println("Error al leer el archivo: " + e.getMessage());
+			}
 
-		manejadorMemoria.crearMatrices();
-		//Se inicializa la memoria virtual
-		memoriaVirtual = new MemoriaVirtual();
-
-		File archivoSalidaModo1 = manejadorMemoria.modo1();
-
-		manejadorMemoria.modo2(archivoSalidaModo1);
-
-
+			manejadorMemoria.crearMatrices();
+			//Se inicializa la memoria virtual
+			manejadorMemoria.modo1();
+			archivoModo1 = "modo1salida.txt";
+		}
+		else if (opcion.equals("2"))
+		{
+			System.out.println( "\nPor favor ingrese la ruta del archivo (ej: \"datos.txt\"): ");
+			archivoModo1 = sc.nextLine();
+		}
+		manejadorMemoria.modo2(archivoModo1);
 
     }
     
