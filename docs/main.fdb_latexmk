@@ -1,12 +1,12 @@
 # Fdb version 3
-["biber main"] 1681527785 "main.bcf" "main.bbl" "main" 1681532496
-  "main.bcf" 1681532496 106628 78a384ee805ae7f398604bbc2a9241db "pdflatex"
+["biber main"] 1681532980 "main.bcf" "main.bbl" "main" 1681533096
+  "main.bcf" 1681533095 106628 78a384ee805ae7f398604bbc2a9241db "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
-["pdflatex"] 1681532495 "/home/xaurdesu/Documentos/repos/caso-2/docs/main.tex" "main.pdf" "main" 1681532496
+["pdflatex"] 1681533094 "/home/xaurdesu/Documentos/repos/caso-2/docs/main.tex" "main.pdf" "main" 1681533096
   "/etc/texmf/web2c/texmf.cnf" 1681434967 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/xaurdesu/Documentos/repos/caso-2/docs/main.tex" 1681532494 10932 b3a8e38f8c4fc8fb41617d8799ccc464 ""
+  "/home/xaurdesu/Documentos/repos/caso-2/docs/main.tex" 1681533093 12642 a723c55579e6f94d79043edabb3d5b71 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/bitstrea/charter/bchb7t.tfm" 1136768653 2732 006d846b4d54f9b40899c7c3eecd771a ""
@@ -250,11 +250,11 @@
   "2-2.jpeg" 1681527776 79227 ebe160a702d1fc0ded9901cf1ab69145 ""
   "cmo.jpeg" 1681530747 119654 597299b31b2ecb3ba799a64435a7fda3 ""
   "head.tex" 1681435823 2642 945c1cb5322ec08358f35d1f701ea129 ""
-  "main.aux" 1681532496 2931 9ea46a4898eb2899519827767bc1afbc "pdflatex"
-  "main.bbl" 1681527785 466 ee04f40f768daeed26442158e95aba61 "biber main"
-  "main.out" 1681532496 4253 0ecd018f785f32a754c20335f22fae07 "pdflatex"
-  "main.run.xml" 1681532496 2359 24c7d3f3344fdae4ae9fc65d6647c75c "pdflatex"
-  "main.tex" 1681532494 10932 b3a8e38f8c4fc8fb41617d8799ccc464 ""
+  "main.aux" 1681533095 2912 20137cc7b6f6e1ae428daf65350ed393 "pdflatex"
+  "main.bbl" 1681532980 466 ee04f40f768daeed26442158e95aba61 "biber main"
+  "main.out" 1681533095 4153 333d2af72a73b12b6908e557e8d30411 "pdflatex"
+  "main.run.xml" 1681533095 2359 24c7d3f3344fdae4ae9fc65d6647c75c "pdflatex"
+  "main.tex" 1681533093 12642 a723c55579e6f94d79043edabb3d5b71 ""
   "prod_p.jpeg" 1681528924 6931 802260ca204e3a6f5395eaeb23576125 ""
   "style/avm.sty" 1681435823 5057 cec8bc669a9099a9976655c41e198f2d ""
   "style/btree.sty" 1681435823 4227 1f940af56ec4d6b13bc5f67ae255817c ""
